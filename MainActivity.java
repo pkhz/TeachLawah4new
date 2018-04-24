@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -147,7 +148,7 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        /* else if (id == R.id.fd) {
+           else if (id == R.id.fd) {
             DummyNode fd = new DummyNode();
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction()
@@ -155,9 +156,9 @@ public class MainActivity extends AppCompatActivity
                     .replace(R.id.mains,
                             fd,
                             fd.getTag()
-                    ).commit(); */
+                    ).commit();
 
-         else if (id == R.id.nav_feedback) {
+          /* else if (id == R.id.nav_feedback) {
             Feedback f = new Feedback();
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction()
@@ -165,7 +166,7 @@ public class MainActivity extends AppCompatActivity
                     .replace(R.id.mains,
                             f,
                             f.getTag()
-                    ).commit();
+                    ).commit(); */
 
         }
 

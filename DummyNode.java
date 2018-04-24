@@ -1,6 +1,6 @@
 package com.example.idea_pad.teachlawah4;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,12 +14,14 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class DummyNode extends Fragment {
@@ -47,13 +49,13 @@ public class DummyNode extends Fragment {
         //getSupportActionBar().setIcon(R.mipmap.ic_launcher);
 
         //txtDetails = (TextView) findViewById(R.id.txt_user);
-        View v = inflater.inflate(R.layout.activity_dummy_node, container, false);
+        View v = inflater.inflate(R.layout.activity_fbacks, container, false);
 
         inputName = (EditText) v.findViewById(R.id.name);
         inputFeed = (EditText) v.findViewById(R.id.feedbac);
         btnSave = (Button) v.findViewById(R.id.btn_save);
 
-        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerview);
+        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerview2);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(v.getContext()));
 
@@ -104,18 +106,33 @@ public class DummyNode extends Fragment {
             }
         });
 
-        FirebaseRecyclerAdapter<DummyNodeData,DummyNodeViewHolder> recyclerAdapter=new FirebaseRecyclerAdapter<DummyNodeData,DummyNodeViewHolder>(
-                DummyNodeData.class,
-                R.layout.individual_row,
-                DummyNodeViewHolder.class,
-                mFirebaseDatabase.child(userId)
-        ) {
+        //query
+        Query query = mFirebaseDatabase.orderByKey();
+
+        FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<DummyNodeData>().setQuery(query, DummyNodeData.class).build();
+
+        FirebaseRecyclerAdapter<DummyNodeData,DummyNodeViewHolder> recyclerAdapter=new FirebaseRecyclerAdapter<DummyNodeData,DummyNodeViewHolder>(options) {
+            //DummyNodeData.class,
+            //R.layout.individual_row,
+            //DummyNodeViewHolder.class,
+            //mFirebaseDatabase.child(userId)
+            @Override
+            protected void onBindViewHolder(DummyNodeViewHolder viewHolder, int position, DummyNodeData model) {
+                viewHolder.setName(model.getName());
+                viewHolder.setFeedback(model.getOtherdata());
+        } /*{
             //syntax changed? check on bind view
             @Override
-            protected void populateViewHolder(DummyNodeViewHolder viewHolder, DummyNodeData model, int position) {
+            protected void onBindViewHolder(DummyNodeViewHolder viewHolder, int position, DummyNodeData model) {
                 viewHolder.setName(model.getName());
                 viewHolder.setFeedback(model.getOtherdata());
 
+            }*/
+            public DummyNodeViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.individual_row, parent, false);
+
+                return new DummyNodeViewHolder(view);
             }
         };
         recyclerView.setAdapter(recyclerAdapter);
@@ -156,6 +173,8 @@ public class DummyNode extends Fragment {
 
         //addUserChangeListener();
     }
+
+
 
     /**
      * User data change listener
